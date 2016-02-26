@@ -418,9 +418,11 @@ public class XWingTournamentCreationWizard extends JDialog {
 		private JRadioButton randomRB;
 		private JRadioButton byGroupRB;
 		private JRadioButton byRankingRB;
+		
 		private JRadioButton singleElimination;
 		private JRadioButton roundRobin;
-
+		private JCheckBox nonSwiss;  
+		
 		private JTextField customPointsTF;
 		private JRadioButton standardRB;
 		private JRadioButton escalationRB;
@@ -459,6 +461,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 				randomRB = new JRadioButton("Random");
 				byGroupRB = new JRadioButton("Seperate By Group Name");
 				byRankingRB = new JRadioButton("By Ranking");
+				
+				nonSwiss = new JCheckBox("Non-Swiss alternatives");
 				singleElimination = new JRadioButton(
 						"<HTML>Start event as single elimination<br>(only for 2/4/8/16/32 players)</HTML>");
 				roundRobin = new JRadioButton("<HTML>Start event as Round Robin");
@@ -477,8 +481,11 @@ public class XWingTournamentCreationWizard extends JDialog {
 						&& wizardOptions.getSelectedTournaments().isEmpty() == false) {
 					tournamentTypesPanel.add(byRankingRB);
 				}
+				tournamentTypesPanel.add(nonSwiss);
 				tournamentTypesPanel.add(singleElimination);
 				tournamentTypesPanel.add(roundRobin);
+				roundRobin.setEnabled(false);
+				singleElimination.setEnabled(false);
 				
 				SpringUtilities
 						.makeCompactGrid(tournamentTypesPanel,
@@ -520,6 +527,15 @@ public class XWingTournamentCreationWizard extends JDialog {
 						} else {
 							customPointsTF.setEnabled(false);
 						}
+						if (nonSwiss.isSelected()) {
+							singleElimination.setEnabled(true);
+							roundRobin.setEnabled(true);
+						} else {
+							singleElimination.setEnabled(false);
+							singleElimination.setSelected(false);
+							roundRobin.setEnabled(false);
+							roundRobin.setSelected(false);
+						}
 					}
 				};
 
@@ -527,7 +543,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 				escalationRB.addActionListener(customListener);
 				epicRB.addActionListener(customListener);
 				customRB.addActionListener(customListener);
-
+				nonSwiss.addActionListener(customListener);
+				
 				customPointsTF = new JTextField();
 				customPointsTF.setColumns(12);
 				customPointsTF.setEnabled(false);
@@ -653,13 +670,15 @@ public class XWingTournamentCreationWizard extends JDialog {
 						.setInitialSeedingEnum(InitialSeedingEnum.IN_ORDER);
 			}
 
-			if (singleElimination.isSelected()) {
-				wizardOptions.setSingleElimination(true);
+			if(nonSwiss.isSelected())
+			{
+				if (singleElimination.isSelected()) {
+					wizardOptions.setSingleElimination(true);
+				}
+				else if(roundRobin.isSelected()) {
+					wizardOptions.setRoundRobin(true);
+				}
 			}
-			else if(roundRobin.isSelected()) {
-				wizardOptions.setRoundRobin(true);
-			}
-			
 
 			boolean fixByes = true;
 

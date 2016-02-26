@@ -355,6 +355,7 @@ public class XWingTournament implements XMLObject, Tournament {
 		}
 	}
 
+	//Generate consecutive rounds for a Round Robin-tournament
 	private void generateRoundRobinRound(int roundNumber)
 	{
 		List<XWingMatch> matches;
@@ -364,11 +365,23 @@ public class XWingTournament implements XMLObject, Tournament {
 			List<XWingPlayer> tempList = new ArrayList<>();
 			tempList.addAll(getXWingPlayers());
 
+			//"Rotate" some or all of the players to
+			//make the matchups
 			XWingPlayer tempPlayer;
+			
+			//if the number of players are odd, rotate the whole
+			//list of players
+			//if the number of players are even, rotate all
+			//but one player
 			int rotationPlace=0;
 			if(tempList.size()%2==0){
 				rotationPlace++;
 			}
+			
+			//once for each round after the first,
+			//move one player to the back of the list
+			//Either the first in the list (for an odd nr of players)
+			//Or the second in the list (for an even nr of players)
 			for(int n=1;n<roundNumber;n++)
 			{
 				tempPlayer=tempList.remove(rotationPlace);
@@ -391,15 +404,7 @@ public class XWingTournament implements XMLObject, Tournament {
 			
 		XWingRound r = new XWingRound(matches, this, roundNumber);
 		rounds.add(r);
-		if (roundNumber == 1
-				&& startAsSingleElimination
-				&& (matches.size() == 1 || matches.size() == 2
-						|| matches.size() == 4 || matches.size() == 8
-						|| matches.size() == 16 || matches.size() == 32)) {
-			r.setSingleElimination(true);
-			getTournamentGUI().getRoundTabbedPane().addSingleEliminationTab(
-					r.getMatches().size() * 2, r.getPanel());
-		} else {
+		{
 			getTournamentGUI().getRoundTabbedPane().addSwissTab(roundNumber,
 					r.getPanel());
 		}
