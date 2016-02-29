@@ -530,11 +530,23 @@ public class XWingTournamentCreationWizard extends JDialog {
 						if (nonSwiss.isSelected()) {
 							singleElimination.setEnabled(true);
 							roundRobin.setEnabled(true);
+							if(roundRobin.isSelected())
+							{
+								byGroupRB.setEnabled(false);
+								randomRB.setEnabled(false);
+							}
+							else
+							{
+								byGroupRB.setEnabled(true);
+								randomRB.setEnabled(true);
+							}
 						} else {
 							singleElimination.setEnabled(false);
 							singleElimination.setSelected(false);
 							roundRobin.setEnabled(false);
 							roundRobin.setSelected(false);
+							byGroupRB.setEnabled(true);
+							randomRB.setEnabled(true);
 						}
 					}
 				};
@@ -544,6 +556,8 @@ public class XWingTournamentCreationWizard extends JDialog {
 				epicRB.addActionListener(customListener);
 				customRB.addActionListener(customListener);
 				nonSwiss.addActionListener(customListener);
+				roundRobin.addActionListener(customListener);
+				singleElimination.addActionListener(customListener);
 				
 				customPointsTF = new JTextField();
 				customPointsTF.setColumns(12);
@@ -679,6 +693,7 @@ public class XWingTournamentCreationWizard extends JDialog {
 					wizardOptions.setRoundRobin(true);
 				}
 			}
+
 
 			boolean fixByes = true;
 

@@ -166,6 +166,11 @@ public class XWingTournament implements XMLObject, Tournament {
 		}
 	}
 
+	public boolean getIsRoundRobin()
+	{
+		return startRoundRobin;
+	}
+	
 	@Override
 	public void setPlayers(List<Player> players) {
 		List<XWingPlayer> xwPlayers = new ArrayList<>();
@@ -403,6 +408,7 @@ public class XWingTournament implements XMLObject, Tournament {
 
 			
 		XWingRound r = new XWingRound(matches, this, roundNumber);
+		//r.setSingleElimination(true);
 		rounds.add(r);
 		{
 			getTournamentGUI().getRoundTabbedPane().addSwissTab(roundNumber,
